@@ -23,6 +23,7 @@ export async function outLogin(options) {
 /** 登录接口 POST /api/login/account */
 
 export async function login(body, options) {
+  const idToken = store.get('idToken');
   return request(
     'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA3kBVtAeUDhGuM5cJYG22lqFL0tH_S8io',
     {
@@ -33,8 +34,7 @@ export async function login(body, options) {
       data: {
         email: body.username,
         password: body.password,
-        token:
-          'eyJhbGciOiJSUzI1NiIsImtpZCI6ImYyNGYzMTQ4MTk3ZWNlYTUyOTE3YzNmMTgzOGFiNWQ0ODg3ZWEwNzYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZS1hbGFybS1zeXN0ZW0tYWI1MjUiLCJhdWQiOiJmaXJlLWFsYXJtLXN5c3RlbS1hYjUyNSIsImF1dGhfdGltZSI6MTY0NDU5NTA2NCwidXNlcl9pZCI6InRZaU5nd0tmRXRmNE1QMXVxajBpbG90YzA2cDIiLCJzdWIiOiJ0WWlOZ3dLZkV0ZjRNUDF1cWowaWxvdGMwNnAyIiwiaWF0IjoxNjQ0NTk1MDY0LCJleHAiOjE2NDQ1OTg2NjQsImVtYWlsIjoiYWRtaW5pc3RyYXRvckBhZG1pbi5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYWRtaW5pc3RyYXRvckBhZG1pbi5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.mgGWgR3aYcA-qFU_Jw8CpwaCSAypBEV8tLyo6_RekfJRjVGE1RUBsEliCYc6QrAprfaN31xyLYwo_34dN2lOca_YeoYHfBDVbgInjVlzzquwUhiWpxZk5P2818FAfXKc1FwIQiDI5N-KkaYYTCPhmbkUVkYxTh7yEmPnnn_-R9GR-R7YQjQxoLVs28M3o9RfnUKfFOZXPqv7lXQ2epUEmjl5bStaBf22SdwKpLayYg7Z1TR5tf3Bm4vBsOf0NFt5lO7WhAmwiRAusKu9ezLXyiUZApLZR4Q4U6-4agzC8uWi6Yq5cgM9UGDZCBzOSpTvBAqMTstcyt1vv5HltqCoOw',
+        token: idToken,
       },
 
       ...(options || {}),
