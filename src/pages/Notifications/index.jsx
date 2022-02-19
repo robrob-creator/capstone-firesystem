@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { EllipsisOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, message, Input, Drawer, Avatar, Badge } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
@@ -233,7 +234,7 @@ const TableList = () => {
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange());
     fetchStations();
-  }, []);
+  });
 
   const fetchStations = async () => {
     let res = await getStations();
