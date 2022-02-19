@@ -81,20 +81,20 @@ export default {
   'pages.searchTable.edit': 'I-edit',
   'pages.searchTable.delete': 'Tanggalin',
   //
-  'pages.searchTable.tag.station': 'Station',
-  'pages.searchTable.tag.active': 'Active',
-  'pages.searchTable.tag.inactive': 'Inactive',
+  'pages.searchTable.tag.station': 'Istasyon',
+  'pages.searchTable.tag.active': 'Aktibo',
+  'pages.searchTable.tag.inactive': 'Hindi aktibo',
   //buttons
-  'pages.searchTable.button.add': 'Add',
-  'pages.searchTable.button.edit': 'Edit',
-  'pages.searchTable.button.delete': 'Delete',
+  'pages.searchTable.button.add': 'Idagdag',
+  'pages.searchTable.button.edit': 'I-edit',
+  'pages.searchTable.button.delete': 'Tanggalin',
   //create form labels
-  'pages.searchTable.createForm.stationName': 'Station Name',
+  'pages.searchTable.createForm.stationName': 'Pangalan ng estasyon',
   'pages.searchTable.createForm.stationHotline': 'Station Hotline',
-  'pages.searchTable.createForm.stationStatus': 'Status',
-  'pages.searchTable.createForm.stationSorting': 'Sorting',
+  'pages.searchTable.createForm.stationStatus': 'Katayuan',
+  'pages.searchTable.createForm.stationSorting': 'Pag-uuri',
   'pages.searchTable.createForm.email': 'Email',
   'pages.searchTable.createForm.password': 'Password',
   //create form title
-  'pages.searchTable.createForm.titleStation': 'Create Station',
+  'pages.searchTable.createForm.titleStation': 'Lumikha ng Istasyon',
 };
