@@ -12,6 +12,7 @@ import { getWarnings } from '@/services/prior-warnings/api';
 import { getStations } from '@/services/stations/api';
 import { Tabs, Radio, Space } from 'antd';
 import { render } from 'enzyme';
+import fire from '@/services/firebase-config/api';
 
 const { TabPane } = Tabs;
 const ColorList = [
@@ -124,12 +125,22 @@ const TableList = () => {
   const [tabPosition, setTabPosition] = useState('left');
   const [avatarSize, setAvatarSize] = useState('large');
   const [isLoading, setIsLoading] = useState(false);
+  const [warn, setWarn] = useState({});
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
 
   const intl = useIntl();
+
+  const warnings = () => {
+    const warnRef = fire.database().ref('PriorWarnings');
+    warnRef.on('value', (snapshot) => {
+      const warn = snapshot.val();
+      console.log('warnings', warn);
+      setWarn(warn);
+    });
+  };
 
   const columns = [
     {
@@ -233,6 +244,7 @@ const TableList = () => {
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange());
     fetchStations();
+    warnings();
   }, []);
 
   const fetchStations = async () => {
@@ -267,7 +279,16 @@ const TableList = () => {
               <TabPane
                 tab={
                   <span>
-                    <Badge count={1} style={{ marginTop: 3 }}>
+                    <Badge
+                      count={
+                        Object.entries(warn[`${Station_Name}`] || {})?.length
+                          ? Object.entries(warn[`${Station_Name}`] || {})?.filter(
+                              (n) => n[1].status === 'not responded',
+                            )?.length
+                          : ''
+                      }
+                      style={{ marginTop: 3 }}
+                    >
                       <Avatar
                         shape="square"
                         style={{
@@ -293,9 +314,6 @@ const TableList = () => {
                   })}
                   actionRef={actionRef}
                   rowKey="key"
-                  search={{
-                    labelWidth: 120,
-                  }}
                   style={{ height: '10hv' }}
                   pagination={{
                     total: meta?.total ? meta?.total : 0,

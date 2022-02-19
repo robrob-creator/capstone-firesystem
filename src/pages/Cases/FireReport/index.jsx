@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-array-index-key */
 import { EllipsisOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, message, Input, Drawer, Avatar, Badge } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
@@ -12,6 +14,7 @@ import { getNotifications } from '@/services/notifications/api';
 import { getStations } from '@/services/stations/api';
 import { Tabs, Radio, Space } from 'antd';
 import { render } from 'enzyme';
+import fire from '@/services/firebase-config/api';
 
 const { TabPane } = Tabs;
 const ColorList = [
@@ -124,6 +127,7 @@ const TableList = () => {
   const [tabPosition, setTabPosition] = useState('left');
   const [avatarSize, setAvatarSize] = useState('large');
   const [isLoading, setIsLoading] = useState(false);
+  const [notif, setNotif] = useState([]);
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -233,6 +237,7 @@ const TableList = () => {
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange());
     fetchStations();
+    notifications();
   }, []);
 
   const fetchStations = async () => {
@@ -246,8 +251,18 @@ const TableList = () => {
       setTabPosition('top');
     }
   };
-  console.log('isloading', isLoading);
-  console.log('stations data:', stations);
+
+  const notifications = () => {
+    const notifRef = fire.database().ref('Notifications');
+    notifRef.on('value', (snapshot) => {
+      const notif = snapshot.val();
+      setNotif(notif);
+    });
+  };
+  console.log(
+    'the notify',
+    notif['Admin']?.filter((station) => station.status === 'not responded').length,
+  );
   return (
     <PageContainer loading={isLoading}>
       <Tabs
@@ -268,7 +283,14 @@ const TableList = () => {
                 <TabPane
                   tab={
                     <span>
-                      <Badge count={1} style={{ marginTop: 3 }}>
+                      <Badge
+                        count={
+                          notif[`${Station_Name}`]?.filter(
+                            (station) => station.status === 'not responded',
+                          ).length
+                        }
+                        style={{ marginTop: 3 }}
+                      >
                         <Avatar
                           shape="square"
                           style={{
@@ -294,9 +316,6 @@ const TableList = () => {
                     })}
                     actionRef={actionRef}
                     rowKey="key"
-                    search={{
-                      labelWidth: 120,
-                    }}
                     style={{ height: '10hv' }}
                     pagination={{
                       total: meta?.total ? meta?.total : 0,

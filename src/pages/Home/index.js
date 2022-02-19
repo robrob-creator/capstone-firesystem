@@ -134,7 +134,6 @@ const Index = () => {
     let array = Object.fromEntries(warnCount);
     console.log(array);
   };
-  console.log('notif', modalData);
   return (
     <>
       <ProCard
