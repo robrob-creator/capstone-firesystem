@@ -94,4 +94,12 @@ export default {
   'pages.searchTable.createForm.password': 'Password',
   //create form title
   'pages.searchTable.createForm.titleStation': 'Create Station',
+
+  //newly added
+  'pages.label.fireReports': 'Fire Reports',
+  'pages.label.priorWarning': 'Prior Warnings',
+  'pages.label.activeFireReports': 'Active Fire Reports',
+  'pages.label.activeSmokeReports': 'Active Smoke Reports',
+  'pages.label.activePriorWarning': 'Active Prior Warnings',
+  'pages.button.viewCases': 'View Cases',
 };

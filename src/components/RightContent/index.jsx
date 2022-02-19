@@ -1,13 +1,46 @@
 import { Space } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import React from 'react';
-import { useModel, SelectLang } from 'umi';
+import { QuestionCircleOutlined, BellFilled } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { useModel, SelectLang, history } from 'umi';
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
+import NoticeIcon from '../NoticeIcon/NoticeIcon';
+import fire from '@/services/firebase-config/api';
 
 const GlobalHeaderRight = () => {
   const { initialState } = useModel('@@initialState');
+  const [notif, setNotif] = useState([]);
+  const [warnCount, setWarnCount] = useState([]);
+
+  useEffect(() => {
+    countWarnings();
+    notifications();
+  }, []);
+
+  const notifications = () => {
+    const notifRef = fire.database().ref('Notifications');
+    notifRef.on('value', (snapshot) => {
+      const notif = snapshot.val();
+      setNotif(notif);
+    });
+  };
+
+  const countWarnings = () => {
+    const warnRef = fire.database().ref('PriorWarnings');
+    warnRef.on('value', (snapshot) => {
+      const warn = snapshot.val();
+      const newData = Object.entries(warn);
+      const warnList = [];
+      for (let id in newData) {
+        warnList.push({ id, ...newData[id].filter((e) => typeof e !== 'string') });
+      }
+      let secondData = warnList.map((data) => data[0]);
+      let thirdData = secondData.flat();
+      let fourthData = thirdData.map((data) => Object.entries(data));
+      setWarnCount(fourthData);
+    });
+  };
 
   if (!initialState || !initialState.settings) {
     return null;
@@ -19,7 +52,6 @@ const GlobalHeaderRight = () => {
   if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
     className = `${styles.right}  ${styles.dark}`;
   }
-
   return (
     <Space className={className}>
       <HeaderSearch
@@ -50,10 +82,17 @@ const GlobalHeaderRight = () => {
       <span
         className={styles.action}
         onClick={() => {
-          window.open('https://pro.ant.design/docs/getting-started');
+          history.push('/fire-reports');
         }}
       >
-        <QuestionCircleOutlined />
+        <NoticeIcon
+          count={
+            warnCount.flat().filter((n) => n[1].status === 'not responded').length +
+            Object.values(notif)
+              .flat()
+              .filter((n) => n.status === 'not responded').length
+          }
+        />
       </span>
       <Avatar />
       <SelectLang className={styles.action} />

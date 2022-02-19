@@ -1,0 +1,17 @@
+export default {
+  'component.globalHeader.search': 'Maghanap',
+  'component.globalHeader.search.example1': 'Halimbawa ng paghahanap 1',
+  'component.globalHeader.search.example2': 'Halimbawa ng paghahanap 2',
+  'component.globalHeader.search.example3': 'Halimbawa ng paghahanap 3',
+  'component.globalHeader.help': 'Tulong',
+  'component.globalHeader.notification': 'Abiso',
+  'component.globalHeader.notification.empty': 'Nakita mo na ang lahat ng notification.',
+  'component.globalHeader.message': 'Mensahe',
+  'component.globalHeader.message.empty': 'Natingnan mo na ang lahat ng mensahe.',
+  'component.globalHeader.event': 'Kaganapan',
+  'component.globalHeader.event.empty': 'Napanood mo na ang lahat ng kaganapan.',
+  'component.noticeIcon.clear': 'Malinaw',
+  'component.noticeIcon.cleared': 'Na-clear',
+  'component.noticeIcon.empty': 'Walang notification',
+  'component.noticeIcon.view-more': 'Tingnan ang higit pa',
+};
