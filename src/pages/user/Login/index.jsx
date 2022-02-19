@@ -8,12 +8,20 @@ import {
 } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
-import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
+import {
+  ProFormCaptcha,
+  ProFormCheckbox,
+  ProFormText,
+  LoginForm,
+  ModalForm,
+} from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
+import Modal from 'antd/lib/modal/Modal';
+import store from 'store';
 
 const LoginMessage = ({ content }) => (
   <Alert
@@ -25,12 +33,12 @@ const LoginMessage = ({ content }) => (
     showIcon
   />
 );
-
 const Login = () => {
   const [userLoginState, setUserLoginState] = useState({});
   const [type, setType] = useState('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const intl = useIntl();
+  const [tokenModal, setTokenModal] = useState(false);
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
@@ -72,6 +80,12 @@ const Login = () => {
       });
       message.error(defaultLoginFailureMessage);
     }
+  };
+
+  const submitToken = (fields) => {
+    store.set('idToken', fields.idToken);
+    store.set('localId', fields.localId);
+    console.log(fields);
   };
 
   const { status, type: loginType } = userLoginState;
@@ -160,6 +174,9 @@ const Login = () => {
               <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
             </ProFormCheckbox>
             <a
+              onClick={() => {
+                setTokenModal(true);
+              }}
               style={{
                 float: 'right',
               }}
@@ -169,6 +186,47 @@ const Login = () => {
           </div>
         </LoginForm>
       </div>
+      <ModalForm
+        title="Token"
+        tooltip="Copy the Token and paste it in the authorization page"
+        visible={tokenModal}
+        width="400px"
+        onVisibleChange={setTokenModal}
+        onFinish={(value) => submitToken(value)}
+      >
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.ruleName"
+                  defaultMessage="Rule name is required"
+                />
+              ),
+            },
+          ]}
+          label="Local Id"
+          width="md"
+          name="localId"
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.ruleName"
+                  defaultMessage="Rule name is required"
+                />
+              ),
+            },
+          ]}
+          label="idToken"
+          width="md"
+          name="idToken"
+        />
+      </ModalForm>
       <Footer />
     </div>
   );
