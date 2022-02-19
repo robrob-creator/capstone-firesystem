@@ -294,9 +294,6 @@ const TableList = () => {
                     })}
                     actionRef={actionRef}
                     rowKey="key"
-                    search={{
-                      labelWidth: 120,
-                    }}
                     style={{ height: '10hv' }}
                     pagination={{
                       total: meta?.total ? meta?.total : 0,

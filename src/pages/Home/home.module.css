@@ -1,0 +1,12 @@
+.danger {
+  color: 'white';
+  font-size: 30px;
+  background-color: '#fb8500';
+  border-radius: 10;
+}
+.safe {
+  color: 'white';
+  font-size: 30px;
+  background-color: '#2d6a4f';
+  border-radius: 10;
+}

@@ -61,7 +61,7 @@ const Login = () => {
         await fetchUserInfo();
         const { query } = history?.location;
         const { redirect } = query;
-        history.push(redirect ? redirect : '/welcome');
+        history.push(redirect ? redirect : '/main-page');
         return;
       }
 
@@ -86,6 +86,7 @@ const Login = () => {
     store.set('idToken', fields.idToken);
     store.set('localId', fields.localId);
     console.log(fields);
+    setTokenModal(false);
   };
 
   const { status, type: loginType } = userLoginState;

@@ -22,7 +22,14 @@ export default [
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
+    hideInMenu: true,
     component: './Welcome',
+  },
+  {
+    path: '/main-page',
+    name: 'Main',
+    icon: 'smile',
+    component: './Home',
   },
   {
     path: '/stations',
@@ -32,35 +39,41 @@ export default [
   },
   {
     path: '/notifications',
+    name: 'Notifications',
+    icon: 'bell',
+    component: './Notifications',
+  },
+  {
+    path: '/fire-reports',
     name: 'fireReports',
     icon: 'bell',
     hideInMenu: true,
-    component: './Cases/Notifications',
+    component: './Cases/FireReport',
   },
   {
     path: '/warning-messages',
     name: 'warning',
     icon: 'bell',
     hideInMenu: true,
-    component: './Cases/Warnings',
+    component: './Cases/PriorWarnings',
   },
   {
     path: '/cases',
     name: 'cases',
     icon: 'FolderOutlined',
-    component: './Cases/Notifications',
-     routes: [
-       {
-        path: '/notifications',
+    component: './Cases/FireReport',
+    routes: [
+      {
+        path: '/fire-reports',
         name: 'fireReports',
         icon: 'bell',
-        component: './Cases/Notifications',
+        component: './Cases/FireReport',
       },
       {
         path: '/warning-messages',
         name: 'warning',
         icon: 'bell',
-        component: './Cases/Warnings',
+        component: './Cases/PriorWarnings',
       },
     ],
   },
@@ -98,7 +111,7 @@ export default [
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/main-page',
   },
   {
     component: './404',
