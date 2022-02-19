@@ -50,5 +50,8 @@ export default {
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
   'menu.dashboard.notifications': 'Notifications',
-  'menu.dashboard.warning': 'Warning',
+  'menu.cases.warning': 'Warning',
+  'menu.cases': 'Cases',
+  'menu.cases.warning': 'Prior Warnings',
+  'menu.cases.fireReports': 'Fire Reports',
 };

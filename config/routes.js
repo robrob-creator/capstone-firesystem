@@ -27,8 +27,42 @@ export default [
   {
     path: '/stations',
     name: 'Stations',
-    icon: 'smile',
+    icon: 'DeploymentUnitOutlined',
     component: './Stations',
+  },
+  {
+    path: '/notifications',
+    name: 'fireReports',
+    icon: 'bell',
+    hideInMenu: true,
+    component: './Cases/Notifications',
+  },
+  {
+    path: '/warning-messages',
+    name: 'warning',
+    icon: 'bell',
+    hideInMenu: true,
+    component: './Cases/Warnings',
+  },
+  {
+    path: '/cases',
+    name: 'cases',
+    icon: 'FolderOutlined',
+    component: './Cases/Notifications',
+     routes: [
+       {
+        path: '/notifications',
+        name: 'fireReports',
+        icon: 'bell',
+        component: './Cases/Notifications',
+      },
+      {
+        path: '/warning-messages',
+        name: 'warning',
+        icon: 'bell',
+        component: './Cases/Warnings',
+      },
+    ],
   },
   {
     path: '/success',
@@ -37,18 +71,7 @@ export default [
     hideInMenu: true,
     component: './success',
   },
-  {
-    path: '/notifications',
-    name: 'dashboard.notifications',
-    icon: 'bell',
-    component: './Notifications',
-  },
-  {
-    path: '/warning-messages',
-    name: 'dashboard.warning',
-    icon: 'bell',
-    component: './Warnings',
-  },
+
   {
     path: '/admin',
     name: 'admin',
