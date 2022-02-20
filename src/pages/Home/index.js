@@ -376,7 +376,7 @@ const Index = () => {
             <Avatar style={{ backgroundColor: '#f94144' }}>A</Avatar>&nbsp;Alerts
           </p>
         }
-        tooltip="Copy the Token and paste it in the authorization page"
+        tooltip="Copy the Token and paste it in the authorization Modal"
         visible={state.visible}
         onOk={hideModal}
         onCancel={hideModal}
@@ -396,8 +396,37 @@ const Index = () => {
                         {' '}
                         {item.warning_message ? item.warning_message : item[1].warning_message}{' '}
                       </Tag>
-                      || Date: {item.date ? item.date : item[1].date} || time: {item.time} || For
-                      Location Click <a href={item.link}> Here</a> || Open:{' '}
+                      ||{' '}
+                      {intl.formatMessage({
+                        id: 'pages.label.date',
+                        defaultMessage: 'Date',
+                      })}{' '}
+                      {item.date ? item.date : item[1].date} ||{' '}
+                      {intl.formatMessage({
+                        id: 'pages.label.time',
+                        defaultMessage: 'Time',
+                      })}{' '}
+                      {item.time} ||{' '}
+                      {intl.formatMessage({
+                        id: 'pages.label.location',
+                        defaultMessage: 'Location',
+                      })}
+                      {intl.formatMessage({
+                        id: 'pages.label.click',
+                        defaultMessage: 'click',
+                      })}{' '}
+                      <a href={item.link}>
+                        {' '}
+                        {intl.formatMessage({
+                          id: 'pages.label.here',
+                          defaultMessage: 'Here',
+                        })}
+                      </a>{' '}
+                      ||{' '}
+                      {intl.formatMessage({
+                        id: 'pages.label.open',
+                        defaultMessage: 'Open',
+                      })}{' '}
                       {item.warning_message === '\nFire Detected!' ||
                       item.warning_message === '\nSmokeDetected!' ? (
                         <a

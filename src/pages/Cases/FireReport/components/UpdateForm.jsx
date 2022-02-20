@@ -52,7 +52,10 @@ const UpdateForm = (props) => {
         })}
       >
         <ProFormText
-          name="name"
+          name={intl.formatMessage({
+            id: 'pages.label.name',
+            defaultMessage: '规则配置',
+          })}
           label={intl.formatMessage({
             id: 'pages.searchTable.updateForm.ruleName.nameLabel',
             defaultMessage: '规则名称',
@@ -74,8 +77,8 @@ const UpdateForm = (props) => {
           name="desc"
           width="md"
           label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleDesc.descLabel',
-            defaultMessage: '规则描述',
+            id: 'pages.label.message',
+            defaultMessage: '规则配置',
           })}
           placeholder={intl.formatMessage({
             id: 'pages.searchTable.updateForm.ruleDesc.descPlaceholder',
@@ -95,74 +98,20 @@ const UpdateForm = (props) => {
           ]}
         />
       </StepsForm.StepForm>
-      <StepsForm.StepForm
-        initialValues={{
-          target: '0',
-          template: '0',
-        }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.ruleProps.title',
-          defaultMessage: '配置规则属性',
-        })}
-      >
-        <ProFormSelect
-          name="target"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.object',
-            defaultMessage: '监控对象',
-          })}
-          valueEnum={{
-            0: '表一',
-            1: '表二',
-          }}
-        />
-        <ProFormSelect
-          name="template"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleProps.templateLabel',
-            defaultMessage: '规则模板',
-          })}
-          valueEnum={{
-            0: '规则模板一',
-            1: '规则模板二',
-          }}
-        />
-        <ProFormRadio.Group
-          name="type"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.ruleProps.typeLabel',
-            defaultMessage: '规则类型',
-          })}
-          options={[
-            {
-              value: '0',
-              label: '强',
-            },
-            {
-              value: '1',
-              label: '弱',
-            },
-          ]}
-        />
-      </StepsForm.StepForm>
+
       <StepsForm.StepForm
         initialValues={{
           type: '1',
           frequency: 'month',
         }}
-        title={intl.formatMessage({
-          id: 'pages.searchTable.updateForm.schedulingPeriod.title',
-          defaultMessage: '设定调度周期',
-        })}
+        title="Date, Time and Link of Location"
       >
         <ProFormDateTimePicker
           name="time"
           width="md"
           label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.schedulingPeriod.timeLabel',
-            defaultMessage: '开始时间',
+            id: 'pages.label.time&date',
+            defaultMessage: '规则配置',
           })}
           rules={[
             {
@@ -176,17 +125,26 @@ const UpdateForm = (props) => {
             },
           ]}
         />
-        <ProFormSelect
-          name="frequency"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.object',
-            defaultMessage: '监控对象',
-          })}
+        <ProFormTextArea
+          name="desc"
           width="md"
-          valueEnum={{
-            month: '月',
-            week: '周',
-          }}
+          label="Link of Location"
+          placeholder={intl.formatMessage({
+            id: 'pages.searchTable.updateForm.ruleDesc.descPlaceholder',
+            defaultMessage: '请输入至少五个字符',
+          })}
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.ruleDesc.descRules"
+                  defaultMessage="请输入至少五个字符的规则描述！"
+                />
+              ),
+              min: 5,
+            },
+          ]}
         />
       </StepsForm.StepForm>
     </StepsForm>
