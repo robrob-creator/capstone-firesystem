@@ -1,14 +1,14 @@
 import { EllipsisOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Avatar, Badge } from 'antd';
+import { Button, message, Input, Drawer, Avatar, Badge, Tag, Popconfirm } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 import { useIntl, FormattedMessage, history } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import UpdateForm from './components/UpdateForm';
 import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { getWarnings } from '@/services/prior-warnings/api';
+import { getWarnings, editWarning, deleteWarning } from '@/services/prior-warnings/api';
 import { getStations } from '@/services/stations/api';
 import { Tabs, Radio, Space } from 'antd';
 import { render } from 'enzyme';
@@ -40,7 +40,7 @@ const ColorList = [
  */
 
 const handleAdd = async (fields) => {
-  const hide = message.loading('正在添加');
+  const hide = message.loading('Adding');
 
   try {
     await addRule({ ...fields });
@@ -64,11 +64,7 @@ const handleUpdate = async (fields) => {
   const hide = message.loading('Configuring');
 
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
+    await editWarning(fields.id, fields);
     hide();
     message.success('Configuration is successful');
     return true;
@@ -85,14 +81,11 @@ const handleUpdate = async (fields) => {
  * @param selectedRows
  */
 
-const handleRemove = async (selectedRows) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-
+const handleRemove = async (record) => {
+  const hide = message.loading('Deleteting');
+  console.log('delelting', record);
   try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
+    await deleteWarning(record.id, record);
     hide();
     message.success('Deleted successfully and will refresh soon');
     return true;
@@ -142,6 +135,7 @@ const TableList = () => {
     });
   };
 
+  console.log('current row', currentRow);
   const columns = [
     {
       title: <FormattedMessage id="pages.searchTable.titleMessage" defaultMessage="Description" />,
@@ -186,37 +180,20 @@ const TableList = () => {
     {
       title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
       dataIndex: 'status',
-      hideInForm: true,
       valueEnum: {
         0: {
           text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
-            />
+            <Tag color={'red'}>
+              <FormattedMessage id="pages.searchTable.statusPending" defaultMessage="Active Case" />
+            </Tag>
           ),
-          status: 'Default',
         },
         1: {
           text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
+            <Tag color={'green'}>
+              <FormattedMessage id="pages.searchTable.statusRecieved" defaultMessage="Responding" />
+            </Tag>
           ),
-          status: 'Processing',
-        },
-        2: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.online" defaultMessage="Online" />
-          ),
-          status: 'Success',
-        },
-        3: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.abnormal"
-              defaultMessage="Abnormal"
-            />
-          ),
-          status: 'Error',
         },
       },
     },
@@ -234,9 +211,29 @@ const TableList = () => {
         >
           <FormattedMessage id="pages.searchTable.edit" defaultMessage="Edit" />
         </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage id="pages.searchTable.delete" defaultMessage="Delete" />
-        </a>,
+        <Popconfirm
+          key="delete"
+          title={intl.formatMessage({
+            id: 'pages.searchTable.areYouSure',
+            defaultMessage: 'Are you sure?',
+          })}
+          okText={intl.formatMessage({
+            id: 'pages.searchTable.yes',
+            defaultMessage: 'Yes',
+          })}
+          cancelText={intl.formatMessage({
+            id: 'pages.searchTable.no',
+            defaultMessage: 'No',
+          })}
+          onConfirm={() => {
+            handleRemove(record);
+            actionRef.current.reload();
+          }}
+        >
+          <a href="#">
+            <FormattedMessage id="pages.searchTable.button.delete" defaultMessage="Delete" />
+          </a>
+        </Popconfirm>,
       ],
     },
   ];
@@ -385,30 +382,75 @@ const TableList = () => {
         />
         <ProFormTextArea width="md" name="desc" />
       </ModalForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
 
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
+      {updateModalVisible && (
+        <ModalForm
+          title={intl.formatMessage({
+            id: 'pages.searchTable.updateForm.title.editDivision',
+            defaultMessage: 'Edit division',
+          })}
+          destroyOnClose
+          width="400px"
+          visible={updateModalVisible}
+          onVisibleChange={handleUpdateModalVisible}
+          onFinish={async (value) => {
+            const success = await handleUpdate(value);
 
-            if (actionRef.current) {
-              actionRef.current.reload();
+            if (success) {
+              handleUpdateModalVisible(false);
+
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
             }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-
-          if (!showDetail) {
-            setCurrentRow(undefined);
-          }
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
-
+          }}
+        >
+          <ProFormText name="id" hidden initialValue={currentRow && currentRow.id} />
+          <ProFormText name="name" hidden initialValue={currentRow && currentRow.name} />
+          <ProFormText
+            name="warning_message"
+            hidden
+            initialValue={currentRow && currentRow.warning_message}
+          />
+          <ProFormText name="date" hidden initialValue={currentRow && currentRow.date} />
+          <ProFormText name="time" hidden initialValue={currentRow && currentRow.time} />
+          <ProFormText name="time" hidden initialValue={currentRow && currentRow.userId} />
+          <ProFormText name="station" hidden initialValue={currentRow && currentRow.station} />
+          <ProFormSelect
+            label={
+              <FormattedMessage
+                id="pages.searchTable.updateForm.statusLabel"
+                defaultMessage="Status"
+              />
+            }
+            rules={[
+              {
+                required: true,
+                message: 'Required',
+              },
+            ]}
+            initialValue={currentRow && currentRow.status}
+            name="status"
+            options={[
+              {
+                value: 0,
+                label: (
+                  <FormattedMessage id="pages.searchTable.statusPending" defaultMessage="Pending" />
+                ),
+              },
+              {
+                value: 1,
+                label: (
+                  <FormattedMessage
+                    id="pages.searchTable.statusRecieved"
+                    defaultMessage="Recieved"
+                  />
+                ),
+              },
+            ]}
+          />
+        </ModalForm>
+      )}
       <Drawer
         width={600}
         visible={showDetail}

@@ -97,7 +97,9 @@ export default {
   'pages.searchTable.createForm.password': 'Password',
   //create form title
   'pages.searchTable.createForm.titleStation': 'Lumikha ng Istasyon',
-
+  'pages.label.activeFireReports': 'Mga Ulat sa Aktibong Sunog',
+  'pages.label.activeSmokeReports': 'Mga Ulat sa Aktibong Usok',
+  'pages.label.activePriorWarning': 'Mga Aktibong Paunang Babala',
   'pages.label.date': 'Petsa:',
   'pages.label.time': 'Oras:',
   'pages.label.location': 'Lokasyon:',
@@ -110,4 +112,12 @@ export default {
   'pages.label.message': ' Mensahe',
   'pages.label.time&date': 'Oras at Petsa',
   'pages.title.monitorNotifications': 'Subaybayan ang mga Notification',
+  'pages.label.cause': 'Dahilan Ng Pangyayari',
+  'pages.searchTable.statusActive': 'Aktibong Kaso',
+  'pages.searchTable.statusResponding': 'Tinutugunan',
+  'pages.searchTable.statusResponded': 'Natugunan',
+  'pages.searchTable.statusRecieved': 'Natanggap',
+  'pages.searchTable.statusPending': 'Nakabinbin',
+  'pages.searchTable.enterToken': 'Ipasok ang Token?',
+  'pages.searchTable.logout': 'Mag-logout',
 };

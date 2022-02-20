@@ -27,13 +27,13 @@ export default [
   },
   {
     path: '/main-page',
-    name: 'Main',
+    name: 'main',
     icon: 'smile',
     component: './Home',
   },
   {
     path: '/stations',
-    name: 'Stations',
+    name: 'stations',
     icon: 'DeploymentUnitOutlined',
     component: './Stations',
   },

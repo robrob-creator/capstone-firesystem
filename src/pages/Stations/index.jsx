@@ -8,7 +8,13 @@ import { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-des
 import ProDescriptions from '@ant-design/pro-descriptions';
 import UpdateForm from './components/UpdateForm';
 import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { getStations, deleteStation, createStation, createUser } from '@/services/stations/api';
+import {
+  getStations,
+  deleteStation,
+  createStation,
+  createUser,
+  createUsers,
+} from '@/services/stations/api';
 import { set } from 'lodash';
 import ProList from '@ant-design/pro-list';
 import { useHistory } from 'react-router-dom';
@@ -36,6 +42,7 @@ const handleAdd = async (fields) => {
     let res = await createUser({ ...fields });
     await createStation({ ...fields, res });
     hide();
+    // await createUsers({ ...fields, res });
     message.success('Added successfully');
     return true;
   } catch (error) {
@@ -55,11 +62,7 @@ const handleUpdate = async (fields) => {
   const hide = message.loading('Configuring');
 
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
+    let res = await createUser({ ...fields });
     hide();
     message.success('Configuration is successful');
     return true;
@@ -142,6 +145,7 @@ const TableList = () => {
       visible: false,
     });
   };
+  console.log('currentRow', currentRow);
   return (
     <PageContainer>
       <ProList
@@ -242,7 +246,15 @@ const TableList = () => {
           },
           actions: {
             render: (text, row) => [
-              <a href={row.html_url} target="_blank" rel="noopener noreferrer" key="link">
+              <a
+                onClick={() => {
+                  handleUpdateModalVisible(true);
+                  setCurrentRow(row);
+                }}
+                target="_blank"
+                rel="noopener noreferrer"
+                key="link"
+              >
                 {intl.formatMessage({
                   id: 'pages.searchTable.button.edit',
                 })}
@@ -441,6 +453,169 @@ const TableList = () => {
           name="password"
         />
       </ModalForm>
+      {updateModalVisible && (
+        <ModalForm
+          title={intl.formatMessage({
+            id: 'pages.searchTable.createForm.titleStation',
+            defaultMessage: 'New Station',
+          })}
+          width="400px"
+          visible={createModalVisible}
+          onVisibleChange={handleModalVisible}
+          onFinish={async (value) => {
+            const success = await handleAdd(value);
+
+            if (success) {
+              handleModalVisible(false);
+
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            }
+          }}
+        >
+          <ProFormSelect
+            initialValue={currentRow && currentRow.status}
+            label={
+              <FormattedMessage id="pages.searchTable.createForm.status" defaultMessage="Status" />
+            }
+            rules={[
+              {
+                required: true,
+                message: <FormattedMessage id="errors.5003" defaultMessage="Is active required" />,
+              },
+            ]}
+            name="status"
+            options={[
+              {
+                value: 1,
+                label: <FormattedMessage id="pages..active" defaultMessage="Active" />,
+              },
+              {
+                value: 0,
+                label: <FormattedMessage id="pages.tag.inactive" defaultMessage="Inctive" />,
+              },
+            ]}
+          />
+          <ProFormText
+            initialValue={currentRow && currentRow.Station_Name}
+            rules={[
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="pages.searchTable.ruleName"
+                    defaultMessage="Rule name is required"
+                  />
+                ),
+              },
+            ]}
+            label={
+              <FormattedMessage
+                id="pages.searchTable.createForm.stationName"
+                defaultMessage="Station Name"
+              />
+            }
+            width="md"
+            name="Station_Name"
+          />
+          <ProFormText
+            initialValue={currentRow && currentRow.Station_Hotline}
+            rules={[
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="pages.searchTable.ruleName"
+                    defaultMessage="Rule name is required"
+                  />
+                ),
+              },
+            ]}
+            label={
+              <FormattedMessage
+                id="pages.searchTable.createForm.stationHotline"
+                defaultMessage="Station Hotline"
+              />
+            }
+            width="md"
+            name="Station_Hotline"
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="pages.searchTable.ruleName"
+                    defaultMessage="Rule name is required"
+                  />
+                ),
+              },
+            ]}
+            label={
+              <FormattedMessage
+                id="pages.searchTable.createForm.stationSorting"
+                defaultMessage="Sorting"
+              />
+            }
+            width="md"
+            name="sorting"
+            initialValue={currentRow && currentRow.sorting}
+          />
+          <ProFormText
+            initialValue={currentRow && currentRow.email}
+            rules={[
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="pages.searchTable.ruleName"
+                    defaultMessage="Rule name is required"
+                  />
+                ),
+              },
+              {
+                pattern:
+                  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: 'Invalid Email',
+              },
+            ]}
+            label={
+              <FormattedMessage id="pages.searchTable.createForm.email" defaultMessage="Email" />
+            }
+            width="md"
+            name="email"
+          />
+          <ProFormText.Password
+            hidden
+            initialValue={currentRow && currentRow.Password}
+            fieldProps={{
+              size: 'large',
+              prefix: <LockOutlined />,
+            }}
+            rules={[
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="pages.searchTable.ruleName"
+                    defaultMessage="Rule name is required"
+                  />
+                ),
+              },
+            ]}
+            label={
+              <FormattedMessage
+                id="pages.searchTable.createForm.password"
+                defaultMessage="Password"
+              />
+            }
+            width="md"
+            name="password"
+          />
+        </ModalForm>
+      )}
     </PageContainer>
   );
 };

@@ -52,6 +52,7 @@ const GlobalHeaderRight = () => {
   if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
     className = `${styles.right}  ${styles.dark}`;
   }
+  console.log('checking', notif?.Admin?.filter((n) => n.status === 0)?.length);
   return (
     <Space className={className}>
       <HeaderSearch
@@ -87,10 +88,11 @@ const GlobalHeaderRight = () => {
       >
         <NoticeIcon
           count={
-            warnCount.flat().filter((n) => n[1].status === 0).length +
-            Object.values(notif)
-              .flat()
-              .filter((n) => n.status === 0).length
+            warnCount?.flat()?.filter((n) => n[1].status === 0).length +
+              Object.values(notif || {})
+                .flat()
+                .filter((n) => n.status === 0).length -
+              notif?.Admin?.filter((n) => n.status === 0)?.length || 0
           }
         />
       </span>

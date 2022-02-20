@@ -52,6 +52,8 @@ export default {
   'menu.dashboard.notifications': 'Notifications',
   'menu.cases.warning': 'Warning',
   'menu.cases': 'Cases',
+  'menu.main': 'Main',
+  'menu.stations': 'Stations',
   'menu.cases.warning': 'Prior Warnings',
   'menu.cases.fireReports': 'Fire Reports',
 };

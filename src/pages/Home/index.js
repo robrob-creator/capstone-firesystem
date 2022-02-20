@@ -23,8 +23,8 @@ import {
 import { Meta } from 'antd/lib/list/Item';
 
 const ColorList = [
-  '#f56a00',
   '#7265e6',
+  '#f56a00',
   '#ffbf00',
   '#00a2ae',
   '#f56a00',
@@ -131,6 +131,7 @@ const Index = () => {
     let array = Object.fromEntries(warnCount);
     console.log(array);
   };
+
   return (
     <>
       <ProCard
@@ -188,24 +189,26 @@ const Index = () => {
                   defaultMessage: 'Active Fire Reports',
                 })}{' '}
                 : &nbsp;
-                {
-                  Object.values(notif)
-                    .flat()
-                    .filter((n) => n.warning_message === '\nFire Detected!' && n.status === 0)
-                    .length
-                }{' '}
+                {Object.values(notif || {})
+                  .flat()
+                  .filter((n) => n?.warning_message === '\nFire Detected!' && n?.status === 0)
+                  .length -
+                  notif?.Admin?.filter(
+                    (n) => n.warning_message === '\nFire Detected!' && n.status === 0,
+                  )?.length}{' '}
                 &nbsp;||&nbsp;
                 {intl.formatMessage({
                   id: 'pages.label.activeSmokeReports',
                   defaultMessage: 'Active Smoke Reports',
                 })}{' '}
                 : &nbsp;
-                {
-                  Object.values(notif)
-                    .flat()
-                    .filter((n) => n.warning_message === '\nSmokeDetected!' && n.status === 0)
-                    .length
-                }
+                {Object.values(notif)
+                  .flat()
+                  .filter((n) => n.warning_message === '\nSmokeDetected!' && n.status === 0)
+                  .length -
+                  notif?.Admin?.filter(
+                    (n) => n.warning_message === '\nSmokeDetected!' && n.status === 0,
+                  )?.length}
                 &nbsp;||&nbsp;
                 {intl.formatMessage({
                   id: 'pages.label.activePriorWarning',
@@ -219,155 +222,175 @@ const Index = () => {
         </Card>
       </ProCard>
       {Object.keys(stations).map(function (Station_Name, sorting) {
-        return (
-          <React.Fragment key={sorting}>
-            <ProCard
-              title={
-                <>
-                  <Avatar
-                    shape="square"
-                    style={{
-                      borderColor: 'green',
-                      backgroundColor: ColorList[sorting],
-                      verticalAlign: 'middle',
-                    }}
-                  >
-                    {Station_Name.charAt(0)}
-                  </Avatar>
-                  &nbsp;{Station_Name}
-                </>
-              }
-              ghost
-              gutter={8}
-              collapsible
-              scroll={{ x: 1300 }}
-            >
+        if (Station_Name !== 'Admin') {
+          return (
+            <React.Fragment key={sorting}>
               <ProCard
-                layout="center"
-                bordered
-                actions={[
-                  <EyeOutlined
-                    key="edit"
-                    onClick={() => {
-                      if (
-                        notif[`${Station_Name}`]?.filter(
-                          (station) =>
-                            station.warning_message === '\nFire Detected!' && station.status === 0,
-                        ).length === undefined ||
-                        notif[`${Station_Name}`]?.filter(
-                          (station) =>
-                            station.warning_message === '\nFire Detected!' && station.status === 0,
-                        ).length === 0
-                      ) {
-                        message.error('No Alerts Available');
-                      } else {
-                        showModal(Station_Name, '\nFire Detected!', 'alert');
-                      }
-                    }}
-                  />,
-                  <EllipsisOutlined key="ellipsis" />,
-                ]}
-                style={{
-                  backgroundColor:
+                title={
+                  <>
+                    <Avatar
+                      shape="square"
+                      style={{
+                        borderColor: 'green',
+                        backgroundColor: ColorList[sorting],
+                        verticalAlign: 'middle',
+                      }}
+                    >
+                      {Station_Name.charAt(0)}
+                    </Avatar>
+                    &nbsp;{Station_Name}
+                  </>
+                }
+                ghost
+                gutter={8}
+                collapsible
+                scroll={{ x: 1300 }}
+              >
+                <ProCard
+                  layout="center"
+                  bordered
+                  actions={[
+                    <EyeOutlined
+                      key="edit"
+                      onClick={() => {
+                        if (
+                          notif[`${Station_Name}`]?.filter(
+                            (station) =>
+                              station.warning_message === '\nFire Detected!' &&
+                              station.status === 0,
+                          ).length === undefined ||
+                          notif[`${Station_Name}`]?.filter(
+                            (station) =>
+                              station.warning_message === '\nFire Detected!' &&
+                              station.status === 0,
+                          ).length === 0
+                        ) {
+                          message.error('No Alerts Available');
+                        } else {
+                          showModal(Station_Name, '\nFire Detected!', 'alert');
+                        }
+                      }}
+                    />,
+                    <EllipsisOutlined
+                      onClick={() => {
+                        history.push('/fire-reports');
+                      }}
+                      key="ellipsis"
+                    />,
+                  ]}
+                  style={{
+                    backgroundColor:
+                      notif[`${Station_Name}`]?.filter(
+                        (station) =>
+                          station.warning_message === '\nFire Detected!' && station.status === 0,
+                      ).length === undefined ||
+                      notif[`${Station_Name}`]?.filter(
+                        (station) =>
+                          station.warning_message === '\nFire Detected!' && station.status === 0,
+                      ).length === 0
+                        ? '#38b000'
+                        : '#fb8500',
+                    borderRadius: 10,
+                    fontSize: '30px',
+                    color: 'white',
+                  }}
+                >
+                  <FireOutlined />
+                  {
                     notif[`${Station_Name}`]?.filter(
                       (station) =>
                         station.warning_message === '\nFire Detected!' && station.status === 0,
-                    ).length === undefined ||
-                    notif[`${Station_Name}`]?.filter(
-                      (station) =>
-                        station.warning_message === '\nFire Detected!' && station.status === 0,
-                    ).length === 0
-                      ? '#38b000'
-                      : '#fb8500',
-                  borderRadius: 10,
-                  fontSize: '30px',
-                  color: 'white',
-                }}
-              >
-                <FireOutlined />
-                {
-                  notif[`${Station_Name}`]?.filter(
-                    (station) =>
-                      station.warning_message === '\nFire Detected!' && station.status === 0,
-                  ).length
-                }
-              </ProCard>
-              <ProCard
-                layout="center"
-                bordered
-                actions={[
-                  <EyeOutlined
-                    key="edit"
-                    onClick={() => {
-                      if (
-                        notif[`${Station_Name}`]?.filter(
-                          (station) => station.warning_message === '\nSmokeDetected!',
-                        ).length === undefined ||
-                        notif[`${Station_Name}`]?.filter(
-                          (station) => station.warning_message === '\nSmokeDetected!',
-                        ).length === 0
-                      ) {
-                        message.error('No Alerts Available');
-                      } else {
-                        showModal(Station_Name, '\nSmokeDetected!', 'alert');
-                      }
-                    }}
-                  />,
-                  <EllipsisOutlined key="ellipsis" />,
-                ]}
-                style={{
-                  backgroundColor:
+                    ).length
+                  }
+                </ProCard>
+                <ProCard
+                  layout="center"
+                  bordered
+                  actions={[
+                    <EyeOutlined
+                      key="edit"
+                      onClick={() => {
+                        if (
+                          notif[`${Station_Name}`]?.filter(
+                            (station) => station.warning_message === '\nSmokeDetected!',
+                          ).length === undefined ||
+                          notif[`${Station_Name}`]?.filter(
+                            (station) => station.warning_message === '\nSmokeDetected!',
+                          ).length === 0
+                        ) {
+                          message.error('No Alerts Available');
+                        } else {
+                          showModal(Station_Name, '\nSmokeDetected!', 'alert');
+                        }
+                      }}
+                    />,
+                    <EllipsisOutlined
+                      onClick={() => {
+                        history.push('/fire-reports');
+                      }}
+                      key="ellipsis"
+                    />,
+                  ]}
+                  style={{
+                    backgroundColor:
+                      notif[`${Station_Name}`]?.filter(
+                        (station) =>
+                          station.warning_message === '\nSmokeDetected!' && station.status === 0,
+                      ).length === undefined ||
+                      notif[`${Station_Name}`]?.filter(
+                        (station) =>
+                          station.warning_message === '\nSmokeDetected!' && station.status === 0,
+                      ).length === 0
+                        ? '#38b000'
+                        : '#fb8500',
+                    borderRadius: 10,
+                    fontSize: '30px',
+                    color: 'white',
+                  }}
+                >
+                  <AlertOutlined />
+                  {
                     notif[`${Station_Name}`]?.filter(
                       (station) =>
                         station.warning_message === '\nSmokeDetected!' && station.status === 0,
-                    ).length === undefined ||
-                    notif[`${Station_Name}`]?.filter(
-                      (station) =>
-                        station.warning_message === '\nSmokeDetected!' && station.status === 0,
-                    ).length === 0
-                      ? '#38b000'
-                      : '#fb8500',
-                  borderRadius: 10,
-                  fontSize: '30px',
-                  color: 'white',
-                }}
-              >
-                <AlertOutlined />
-                {
-                  notif[`${Station_Name}`]?.filter(
-                    (station) =>
-                      station.warning_message === '\nSmokeDetected!' && station.status === 0,
-                  ).length
-                }
+                    ).length
+                  }
+                </ProCard>
+                <ProCard
+                  layout="center"
+                  bordered
+                  actions={[
+                    <EyeOutlined
+                      key="edit"
+                      onClick={() => {
+                        showModal(Station_Name, '\nSmokeDetected!', 'message');
+                      }}
+                    />,
+                    <EllipsisOutlined
+                      onClick={() => {
+                        history.push('/warning-messages');
+                      }}
+                      key="ellipsis"
+                    />,
+                  ]}
+                  style={{
+                    backgroundColor: '#00b4d8',
+                    borderRadius: 10,
+                    fontSize: '30px',
+                    color: 'white',
+                  }}
+                >
+                  <MessageOutlined />{' '}
+                  {Object.entries(warn[`${Station_Name}`] || {})?.length
+                    ? Object.entries(warn[`${Station_Name}`] || {})?.filter(
+                        (n) => n[1].status === 0,
+                      )?.length
+                    : ''}
+                </ProCard>
               </ProCard>
-              <ProCard
-                layout="center"
-                bordered
-                actions={[
-                  <EyeOutlined
-                    key="edit"
-                    onClick={() => {
-                      showModal(Station_Name, '\nSmokeDetected!', 'message');
-                    }}
-                  />,
-                  <EllipsisOutlined key="ellipsis" />,
-                ]}
-                style={{
-                  backgroundColor: '#00b4d8',
-                  borderRadius: 10,
-                  fontSize: '30px',
-                  color: 'white',
-                }}
-              >
-                <MessageOutlined />{' '}
-                {Object.entries(warn[`${Station_Name}`] || {})?.length
-                  ? Object.entries(warn[`${Station_Name}`] || {})?.filter((n) => n[1].status === 0)
-                      ?.length
-                  : ''}
-              </ProCard>
-            </ProCard>
-          </React.Fragment>
-        );
+            </React.Fragment>
+          );
+        }
       })}
 
       <Modal

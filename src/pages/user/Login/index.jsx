@@ -22,6 +22,22 @@ import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
 import Modal from 'antd/lib/modal/Modal';
 import store from 'store';
+import { createUsers } from '@/services/stations/api';
+
+const handleAdd = async (fields) => {
+  const hide = message.loading('Saving');
+  try {
+    await createUsers({ ...fields });
+    hide();
+    //
+    message.success('Added successfully');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('Adding failed, please try again!');
+    return false;
+  }
+};
 
 const LoginMessage = ({ content }) => (
   <Alert
@@ -182,7 +198,7 @@ const Login = () => {
                 float: 'right',
               }}
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
+              <FormattedMessage id="pages.searchTable.enterToken" defaultMessage="Enter Token?" />
             </a>
           </div>
         </LoginForm>
@@ -193,7 +209,17 @@ const Login = () => {
         visible={tokenModal}
         width="400px"
         onVisibleChange={setTokenModal}
-        onFinish={(value) => submitToken(value)}
+        onFinish={async (value) => {
+          const success = await handleAdd(value);
+
+          if (success) {
+            setTokenModal(false);
+
+            if (actionRef.current) {
+              actionRef.current.reload();
+            }
+          }
+        }}
       >
         <ProFormText
           rules={[

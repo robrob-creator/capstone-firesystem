@@ -45,12 +45,6 @@ const HeaderSearch = (props) => {
         }
       }}
     >
-      <SearchOutlined
-        key="Icon"
-        style={{
-          cursor: 'pointer',
-        }}
-      />
       <AutoComplete
         key="AutoComplete"
         className={inputClass}

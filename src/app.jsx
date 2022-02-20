@@ -56,7 +56,7 @@ export const layout = ({ initialState, setInitialState }) => {
         history.push(loginPath);
       }
     },
-    links: isDev
+    /* links: isDev
       ? [
           <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
             <LinkOutlined />
@@ -67,7 +67,7 @@ export const layout = ({ initialState, setInitialState }) => {
             <span>业务组件文档</span>
           </Link>,
         ]
-      : [],
+      : [],*/
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
