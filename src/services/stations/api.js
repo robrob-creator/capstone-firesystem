@@ -1,4 +1,5 @@
 import { request } from 'umi';
+import store from 'store';
 //'https://react-getting-startef-default-rtdb.firebaseio.com/Cases.json',
 export async function getStations(options) {
   return request(`${API_URL}/BFP_SERVER/Station.json`, {
@@ -61,4 +62,25 @@ export async function createUser(body, options) {
       ...(options || {}),
     },
   );
+}
+
+export async function createUsers(body, options) {
+  console.log('body post:', body.localId);
+  return request(`${API_URL}/admin_users/${body.localId}.json?print=silent`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      access: 'user',
+      currentAuthority: 'user',
+      isLogin: true,
+      name: 'admin',
+      status: 'success',
+      type: 'account',
+    },
+    ...(options || {}),
+  });
+  store.set('idToken', body.idToken);
+  store.set('localId', body.localId);
 }

@@ -52,6 +52,8 @@ export default {
   'menu.dashboard.notifications': 'Mga abiso',
   'menu.cases.warning': 'Babala',
   'menu.cases': 'Mga kaso',
+  'menu.main': 'Pangunahin',
+  'menu.stations': 'Mga istasyon',
   'menu.cases.warning': 'Paunang Babala',
   'menu.cases.fireReports': 'Mga Ulat sa Sunog',
 };
