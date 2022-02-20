@@ -65,7 +65,8 @@ export async function createUser(body, options) {
 }
 
 export async function createUsers(body, options) {
-  console.log('body post:', body.localId);
+  store.set('idToken', body.idToken);
+  store.set('localId', body.localId);
   return request(`${API_URL}/admin_users/${body.localId}.json?print=silent`, {
     method: 'PUT',
     headers: {
@@ -81,6 +82,4 @@ export async function createUsers(body, options) {
     },
     ...(options || {}),
   });
-  store.set('idToken', body.idToken);
-  store.set('localId', body.localId);
 }
