@@ -97,4 +97,15 @@ export default {
   'pages.searchTable.createForm.password': 'Password',
   //create form title
   'pages.searchTable.createForm.titleStation': 'Lumikha ng Istasyon',
+  'pages.label.date': 'Petsa:',
+  'pages.label.time': 'Oras:',
+  'pages.label.location': 'Lokasyon:',
+  'pages.label.open': 'Buksan:',
+  'pages.label.here': 'Dito:',
+  'pages.label.click': '  E-click',
+  'pages.onclick.firedetected': ' Natukoy ang Sunog!',
+  'pages.onclick.smokedetected': ' Natukoy ang Usok!',
+  'pages.label.name': ' Pangalan',
+  'pages.label.message': ' Mensahe',
+  'pages.label.time&date': 'Oras at Petsa',
 };

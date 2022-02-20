@@ -222,6 +222,7 @@ const TableList = () => {
           key="config"
           onClick={() => {
             handleUpdateModalVisible(true);
+            handleModalVisible(true);
             setCurrentRow(record);
           }}
         >
