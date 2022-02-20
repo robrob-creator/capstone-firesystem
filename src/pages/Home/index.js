@@ -53,15 +53,11 @@ const Index = () => {
 
   const showModal = (Station_Name, message, type) => {
     if (type === 'message') {
-      setModalData(
-        Object.entries(warn[`${Station_Name}`] || {})?.filter(
-          (n) => n[1].status === 'not responded',
-        ),
-      );
+      setModalData(Object.entries(warn[`${Station_Name}`] || {})?.filter((n) => n[1].status === 0));
     } else {
       setModalData(
         notif[Station_Name]?.filter(
-          (station) => station.warning_message === message && station.status === 'not responded',
+          (station) => station.warning_message === message && station.status === 0,
         ),
       );
     }
@@ -195,10 +191,8 @@ const Index = () => {
                 {
                   Object.values(notif)
                     .flat()
-                    .filter(
-                      (n) =>
-                        n.warning_message === '\nFire Detected!' && n.status === 'not responded',
-                    ).length
+                    .filter((n) => n.warning_message === '\nFire Detected!' && n.status === 0)
+                    .length
                 }{' '}
                 &nbsp;||&nbsp;
                 {intl.formatMessage({
@@ -209,10 +203,8 @@ const Index = () => {
                 {
                   Object.values(notif)
                     .flat()
-                    .filter(
-                      (n) =>
-                        n.warning_message === '\nSmokeDetected!' && n.status === 'not responded',
-                    ).length
+                    .filter((n) => n.warning_message === '\nSmokeDetected!' && n.status === 0)
+                    .length
                 }
                 &nbsp;||&nbsp;
                 {intl.formatMessage({
@@ -220,7 +212,7 @@ const Index = () => {
                   defaultMessage: 'Active Prior Warnings',
                 })}{' '}
                 : &nbsp;
-                {warnCount.flat().filter((n) => n[1].status === 'not responded').length}
+                {warnCount.flat().filter((n) => n[1].status === 0).length}
               </>
             }
           />
@@ -260,13 +252,11 @@ const Index = () => {
                       if (
                         notif[`${Station_Name}`]?.filter(
                           (station) =>
-                            station.warning_message === '\nFire Detected!' &&
-                            station.status === 'not responded',
+                            station.warning_message === '\nFire Detected!' && station.status === 0,
                         ).length === undefined ||
                         notif[`${Station_Name}`]?.filter(
                           (station) =>
-                            station.warning_message === '\nFire Detected!' &&
-                            station.status === 'not responded',
+                            station.warning_message === '\nFire Detected!' && station.status === 0,
                         ).length === 0
                       ) {
                         message.error('No Alerts Available');
@@ -281,13 +271,11 @@ const Index = () => {
                   backgroundColor:
                     notif[`${Station_Name}`]?.filter(
                       (station) =>
-                        station.warning_message === '\nFire Detected!' &&
-                        station.status === 'not responded',
+                        station.warning_message === '\nFire Detected!' && station.status === 0,
                     ).length === undefined ||
                     notif[`${Station_Name}`]?.filter(
                       (station) =>
-                        station.warning_message === '\nFire Detected!' &&
-                        station.status === 'not responded',
+                        station.warning_message === '\nFire Detected!' && station.status === 0,
                     ).length === 0
                       ? '#38b000'
                       : '#fb8500',
@@ -300,8 +288,7 @@ const Index = () => {
                 {
                   notif[`${Station_Name}`]?.filter(
                     (station) =>
-                      station.warning_message === '\nFire Detected!' &&
-                      station.status === 'not responded',
+                      station.warning_message === '\nFire Detected!' && station.status === 0,
                   ).length
                 }
               </ProCard>
@@ -332,13 +319,11 @@ const Index = () => {
                   backgroundColor:
                     notif[`${Station_Name}`]?.filter(
                       (station) =>
-                        station.warning_message === '\nSmokeDetected!' &&
-                        station.status === 'not responded',
+                        station.warning_message === '\nSmokeDetected!' && station.status === 0,
                     ).length === undefined ||
                     notif[`${Station_Name}`]?.filter(
                       (station) =>
-                        station.warning_message === '\nSmokeDetected!' &&
-                        station.status === 'not responded',
+                        station.warning_message === '\nSmokeDetected!' && station.status === 0,
                     ).length === 0
                       ? '#38b000'
                       : '#fb8500',
@@ -351,8 +336,7 @@ const Index = () => {
                 {
                   notif[`${Station_Name}`]?.filter(
                     (station) =>
-                      station.warning_message === '\nSmokeDetected!' &&
-                      station.status === 'not responded',
+                      station.warning_message === '\nSmokeDetected!' && station.status === 0,
                   ).length
                 }
               </ProCard>
@@ -377,9 +361,8 @@ const Index = () => {
               >
                 <MessageOutlined />{' '}
                 {Object.entries(warn[`${Station_Name}`] || {})?.length
-                  ? Object.entries(warn[`${Station_Name}`] || {})?.filter(
-                      (n) => n[1].status === 'not responded',
-                    )?.length
+                  ? Object.entries(warn[`${Station_Name}`] || {})?.filter((n) => n[1].status === 0)
+                      ?.length
                   : ''}
               </ProCard>
             </ProCard>

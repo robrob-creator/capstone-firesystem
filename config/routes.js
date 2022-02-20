@@ -41,6 +41,7 @@ export default [
     path: '/notifications',
     name: 'Notifications',
     icon: 'bell',
+    hideInMenu: true,
     component: './Notifications',
   },
   {

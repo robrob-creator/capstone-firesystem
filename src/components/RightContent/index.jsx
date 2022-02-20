@@ -87,10 +87,10 @@ const GlobalHeaderRight = () => {
       >
         <NoticeIcon
           count={
-            warnCount.flat().filter((n) => n[1].status === 'not responded').length +
+            warnCount.flat().filter((n) => n[1].status === 0).length +
             Object.values(notif)
               .flat()
-              .filter((n) => n.status === 'not responded').length
+              .filter((n) => n.status === 0).length
           }
         />
       </span>
