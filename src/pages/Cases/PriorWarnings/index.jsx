@@ -283,7 +283,7 @@ const TableList = () => {
                       count={
                         Object.entries(warn[`${Station_Name}`] || {})?.length
                           ? Object.entries(warn[`${Station_Name}`] || {})?.filter(
-                              (n) => n[1].status === 'not responded',
+                              (n) => n[1].status === 0,
                             )?.length
                           : ''
                       }

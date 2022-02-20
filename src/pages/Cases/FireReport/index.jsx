@@ -260,10 +260,7 @@ const TableList = () => {
       setNotif(notif);
     });
   };
-  console.log(
-    'the notify',
-    notif['Admin']?.filter((station) => station.status === 'not responded').length,
-  );
+  console.log('the notify', notif['Admin']?.filter((station) => station.status === 0).length);
   return (
     <PageContainer loading={isLoading}>
       <Tabs
@@ -286,9 +283,7 @@ const TableList = () => {
                     <span>
                       <Badge
                         count={
-                          notif[`${Station_Name}`]?.filter(
-                            (station) => station.status === 'not responded',
-                          ).length
+                          notif[`${Station_Name}`]?.filter((station) => station.status === 0).length
                         }
                         style={{ marginTop: 3 }}
                       >

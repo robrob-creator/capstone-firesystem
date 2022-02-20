@@ -97,6 +97,7 @@ export default {
   'pages.searchTable.createForm.password': 'Password',
   //create form title
   'pages.searchTable.createForm.titleStation': 'Lumikha ng Istasyon',
+
   'pages.label.date': 'Petsa:',
   'pages.label.time': 'Oras:',
   'pages.label.location': 'Lokasyon:',
@@ -108,4 +109,5 @@ export default {
   'pages.label.name': ' Pangalan',
   'pages.label.message': ' Mensahe',
   'pages.label.time&date': 'Oras at Petsa',
+  'pages.title.monitorNotifications': 'Subaybayan ang mga Notification',
 };

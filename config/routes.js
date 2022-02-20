@@ -41,6 +41,7 @@ export default [
     path: '/notifications',
     name: 'Notifications',
     icon: 'bell',
+    hideInMenu: true,
     component: './Notifications',
   },
   {
@@ -107,6 +108,7 @@ export default [
     name: 'list.table-list',
     icon: 'table',
     path: '/list',
+    hideInMenu: true,
     component: './TableList',
   },
   {

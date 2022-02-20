@@ -108,4 +108,6 @@ export default {
   'pages.label.open': 'Open',
   'pages.label.here': 'Here',
   'pages.label.click': 'click',
+  'pages.title.monitorNotifications': 'Monitor Notifications',
+
 };
