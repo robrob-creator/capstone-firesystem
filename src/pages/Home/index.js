@@ -9,6 +9,7 @@ import fire from '@/services/firebase-config/api';
 import { history, useIntl } from 'umi';
 import classes from './home.module.css';
 import {
+  AlertOutlined,
   CloudOutlined,
   EditOutlined,
   EllipsisOutlined,
@@ -179,7 +180,10 @@ const Index = () => {
             avatar={
               <Avatar src="/logo.svg" style={{ borderStyle: 'solid', borderColor: 'green' }} />
             }
-            title="Monitor Notifications"
+            title={intl.formatMessage({
+              id: 'pages.title.monitorNotifications',
+              defaultMessage: 'Monitor Notifications',
+            })}
             description={
               <>
                 {' '}
@@ -343,7 +347,7 @@ const Index = () => {
                   color: 'white',
                 }}
               >
-                <CloudOutlined />
+                <AlertOutlined />
                 {
                   notif[`${Station_Name}`]?.filter(
                     (station) =>

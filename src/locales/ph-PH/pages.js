@@ -97,4 +97,5 @@ export default {
   'pages.searchTable.createForm.password': 'Password',
   //create form title
   'pages.searchTable.createForm.titleStation': 'Lumikha ng Istasyon',
+  'pages.title.monitorNotifications': 'Subaybayan ang mga Notification',
 };

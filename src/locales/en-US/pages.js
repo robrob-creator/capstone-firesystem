@@ -102,4 +102,5 @@ export default {
   'pages.label.activeSmokeReports': 'Active Smoke Reports',
   'pages.label.activePriorWarning': 'Active Prior Warnings',
   'pages.button.viewCases': 'View Cases',
+  'pages.title.monitorNotifications': 'Monitor Notifications',
 };
