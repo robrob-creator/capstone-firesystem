@@ -165,10 +165,6 @@ const TableList = () => {
       dataIndex: 'date',
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleTime" defaultMessage="TIme" />,
-      dataIndex: 'time',
-    },
-    {
       title: <FormattedMessage id="pages.searchTable.titleLink" defaultMessage="Link" />,
       dataIndex: 'link',
       sorter: true,

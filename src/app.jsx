@@ -8,6 +8,8 @@ import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+import { ConfigProvider } from 'antd';
+import en_US from 'antd/lib/locale/en_US';
 /** 获取用户信息比较慢的时候会展示一个 loading */
 
 export const initialStateConfig = {
@@ -75,7 +77,7 @@ export const layout = ({ initialState, setInitialState }) => {
     childrenRender: (children, props) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
-        <>
+        <ConfigProvider locale={en_US}>
           {children}
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
@@ -87,7 +89,7 @@ export const layout = ({ initialState, setInitialState }) => {
               }}
             />
           )}
-        </>
+        </ConfigProvider>
       );
     },
     ...initialState?.settings,
