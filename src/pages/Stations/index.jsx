@@ -212,6 +212,7 @@ const TableList = () => {
                   <p>
                     idToken:<span onClick={() => showModal(entity)}> Click here to view</span>
                   </p>
+                  <p>localId:{entity?.authorizations?.localId}</p>
                 </span>
               );
             },
