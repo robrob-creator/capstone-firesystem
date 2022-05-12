@@ -27,7 +27,7 @@ const GlobalHeaderRight = () => {
   };
 
   const countWarnings = () => {
-    const warnRef = fire.database().ref('PriorWarnings');
+    const warnRef = fire.database().ref('messages');
     warnRef.on('value', (snapshot) => {
       const warn = snapshot.val();
       const newData = Object.entries(warn);
@@ -88,7 +88,7 @@ const GlobalHeaderRight = () => {
       >
         <NoticeIcon
           count={
-            warnCount?.flat()?.filter((n) => n[1].status === 0).length +
+            warnCount?.flat()?.filter((n) => n[1]?.details?.status === 0).length +
               Object.values(notif || {})
                 .flat()
                 .filter((n) => n.status === 0).length -

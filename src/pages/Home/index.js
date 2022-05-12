@@ -103,7 +103,7 @@ const Index = () => {
   };
 
   const warnings = () => {
-    const warnRef = fire.database().ref('PriorWarnings');
+    const warnRef = fire.database().ref('messages');
     warnRef.on('value', (snapshot) => {
       const warn = snapshot.val();
       console.log('warnings', warn);
@@ -112,7 +112,7 @@ const Index = () => {
   };
 
   const countWarnings = () => {
-    const warnRef = fire.database().ref('PriorWarnings');
+    const warnRef = fire.database().ref('messages');
     warnRef.on('value', (snapshot) => {
       const warn = snapshot.val();
       const newData = Object.entries(warn);
@@ -215,7 +215,7 @@ const Index = () => {
                   defaultMessage: 'Active Prior Warnings',
                 })}{' '}
                 : &nbsp;
-                {warnCount.flat().filter((n) => n[1].status === 0).length}
+                {warnCount.flat().filter((n) => n[1]?.details?.status === 0).length}
               </>
             }
           />
@@ -383,7 +383,7 @@ const Index = () => {
                   <MessageOutlined />{' '}
                   {Object.entries(warn[`${Station_Name}`] || {})?.length
                     ? Object.entries(warn[`${Station_Name}`] || {})?.filter(
-                        (n) => n[1].status === 0,
+                        (n) => n[1]?.details?.status === 0,
                       )?.length
                     : ''}
                 </ProCard>

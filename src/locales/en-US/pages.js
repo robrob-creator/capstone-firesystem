@@ -77,6 +77,13 @@ export default {
   'pages.searchTable.titleDate': 'Date',
   'pages.searchTable.edit': 'Edit',
   'pages.searchTable.delete': 'Delete',
+  //to be translated
+  'pages.searchTable.view': 'View',
+  'pages.searchTable.titleApprove': 'Approve',
+  'pages.searchTable.titleDecline': 'Decline',
+  'pages.searchTable.titleProfile': 'Profile',
+  'pages.searchTable.titleFront': 'Front of ID',
+  'pages.searchTable.titleBack': 'Back ID',
   //
   'pages.searchTable.tag.station': 'Station',
   'pages.searchTable.tag.active': 'Active',
@@ -126,6 +133,7 @@ export default {
   'pages.searchTable.statusResponded': 'Responded',
   'pages.searchTable.statusRecieved': 'Recieved',
   'pages.searchTable.statusPending': 'Pending',
+  'pages.searchTable.statusSeen': 'Seen',
   'pages.searchTable.enterToken': 'Enter Token?',
   'pages.searchTable.logout': 'Logout',
 };

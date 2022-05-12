@@ -321,7 +321,6 @@ const TableList = () => {
                       };
                     } catch (error) {}
                   }}
-                  search={false}
                   columns={columns}
                 />
               </TabPane>

@@ -38,6 +38,12 @@ export default [
     component: './Stations',
   },
   {
+    path: '/verification-request',
+    name: 'Verification Requests',
+    icon: 'DeploymentUnitOutlined',
+    component: './Verification',
+  },
+  {
     path: '/notifications',
     name: 'Notifications',
     icon: 'bell',
@@ -51,12 +57,20 @@ export default [
     hideInMenu: true,
     component: './Cases/FireReport',
   },
+
   {
     path: '/warning-messages',
     name: 'warning',
     icon: 'bell',
     hideInMenu: true,
     component: './Cases/PriorWarnings',
+  },
+  {
+    name: 'conversation',
+    path: '/conversation/:station/:id',
+    hideInMenu: true,
+    icon: 'smile',
+    component: './Conversation',
   },
   {
     path: '/cases',

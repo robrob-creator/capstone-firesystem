@@ -119,6 +119,7 @@ const TableList = () => {
   const [avatarSize, setAvatarSize] = useState('large');
   const [isLoading, setIsLoading] = useState(false);
   const [warn, setWarn] = useState({});
+  const [msgData, setMsgData] = useState();
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -127,7 +128,7 @@ const TableList = () => {
   const intl = useIntl();
 
   const warnings = () => {
-    const warnRef = fire.database().ref('PriorWarnings');
+    const warnRef = fire.database().ref('messages');
     warnRef.on('value', (snapshot) => {
       const warn = snapshot.val();
       console.log('warnings', warn);
@@ -135,11 +136,19 @@ const TableList = () => {
     });
   };
 
-  console.log('current row', currentRow);
+  const view = (id, station) => {
+    console.log(id);
+    const msgRef = fire.database().ref(`messages/${station}/${id}/details/status`);
+    msgRef.set(1);
+
+    history.push(`conversation/${station}/${id}`);
+  };
+
   const columns = [
     {
       title: <FormattedMessage id="pages.searchTable.titleMessage" defaultMessage="Description" />,
-      dataIndex: 'warning_message',
+      dataIndex: 'user_message',
+      render: (dom, entity) => entity?.details?.last_message,
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleName" defaultMessage="Name" />,
@@ -155,7 +164,7 @@ const TableList = () => {
               setShowDetail(true);
             }}
           >
-            {dom}
+            {entity?.details?.user_name}
           </a>
         );
       },
@@ -163,34 +172,21 @@ const TableList = () => {
     {
       title: <FormattedMessage id="pages.searchTable.titleDate" defaultMessage="Date" />,
       dataIndex: 'date',
-    },
-    {
-      title: <FormattedMessage id="pages.searchTable.titleLink" defaultMessage="Link" />,
-      dataIndex: 'link',
-      sorter: true,
-      hideInForm: true,
-      render: (dom, entity) => {
-        return <a href={dom}>Click Here</a>;
-      },
+      render: (dom, entity) => entity?.details?.date,
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
       dataIndex: 'status',
-      valueEnum: {
-        0: {
-          text: (
-            <Tag color={'red'}>
-              <FormattedMessage id="pages.searchTable.statusPending" defaultMessage="Active Case" />
-            </Tag>
-          ),
-        },
-        1: {
-          text: (
-            <Tag color={'green'}>
-              <FormattedMessage id="pages.searchTable.statusRecieved" defaultMessage="Responding" />
-            </Tag>
-          ),
-        },
+      render: (dom, entity) => {
+        return !entity?.details?.status ? (
+          <Tag color={'red'}>
+            <FormattedMessage id="pages.searchTable.statusPending" defaultMessage="Active Case" />
+          </Tag>
+        ) : (
+          <Tag color={'green'}>
+            <FormattedMessage id="pages.searchTable.statusSeen" defaultMessage="Seen" />
+          </Tag>
+        );
       },
     },
     {
@@ -198,14 +194,8 @@ const TableList = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <a
-          key="config"
-          onClick={() => {
-            handleUpdateModalVisible(true);
-            setCurrentRow(record);
-          }}
-        >
-          <FormattedMessage id="pages.searchTable.edit" defaultMessage="Edit" />
+        <a key="config" onClick={() => view(record?.details?.userId, record?.details?.station)}>
+          <FormattedMessage id="pages.searchTable.view" defaultMessage="View" />
         </a>,
         <Popconfirm
           key="delete"
@@ -251,8 +241,7 @@ const TableList = () => {
       setTabPosition('top');
     }
   };
-  console.log('isloading', isLoading);
-  console.log('stations data:', stations);
+
   return (
     <PageContainer loading={isLoading}>
       <Tabs
@@ -276,7 +265,7 @@ const TableList = () => {
                       count={
                         Object.entries(warn[`${Station_Name}`] || {})?.length
                           ? Object.entries(warn[`${Station_Name}`] || {})?.filter(
-                              (n) => n[1].status === 0,
+                              (n) => n[1]?.details?.status === 0,
                             )?.length
                           : ''
                       }
@@ -325,7 +314,6 @@ const TableList = () => {
                     try {
                       let res = await getWarnings(params, Station_Name);
                       setMeta(res);
-                      console.log('con dsts', Object.values(res));
                       return {
                         data: Object.values(res),
                         success: true,

@@ -11,3 +11,13 @@ export async function getUser(body, params, options) {
     ...(options || {}),
   });
 }
+export async function getUserById(id, params, options) {
+  return request(`${API_URL}/users/${id}.json?print=pretty`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+    params: { ...params },
+    ...(options || {}),
+  });
+}
