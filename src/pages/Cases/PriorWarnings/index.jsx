@@ -85,7 +85,7 @@ const handleRemove = async (record) => {
   const hide = message.loading('Deleteting');
   console.log('delelting', record);
   try {
-    await deleteWarning(record.id, record);
+    await deleteWarning(record?.details?.userId, record);
     hide();
     message.success('Deleted successfully and will refresh soon');
     return true;
@@ -314,6 +314,7 @@ const TableList = () => {
                     try {
                       let res = await getWarnings(params, Station_Name);
                       setMeta(res);
+                      console.log('data', Object.values(res));
                       return {
                         data: Object.values(res),
                         success: true,

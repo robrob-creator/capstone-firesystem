@@ -14,7 +14,7 @@ export async function getWarnings(query, body, params, options) {
 
 export async function deleteWarning(id, body, options) {
   console.log('this is delete', body.id, 'and this is station', body.station);
-  return request(`${API_URL}/messages/${body.station}/${id}.json?print=silent`, {
+  return request(`${API_URL}/messages/${body.details.station}/${id}.json?print=silent`, {
     method: 'DELETE',
     ...(options || {}),
   });
