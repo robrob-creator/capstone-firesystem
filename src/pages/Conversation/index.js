@@ -8,7 +8,7 @@ import { getUserById } from '@/services/user/api';
 
 const { TextArea } = Input;
 
-const Editor = ({ messageText, setMessageText, onSubmit, submitting, value }) => (
+const Editor = ({ messageText, setMessageText, onSubmit, submitting, value, handleKeyPress }) => (
   <>
     <Form.Item>
       {/**  <TextArea rows={4} onChange={onChange} value={value} />*/}
@@ -17,8 +17,9 @@ const Editor = ({ messageText, setMessageText, onSubmit, submitting, value }) =>
         placeholder="large size"
         onChange={(e) => setMessageText(e.target?.value)}
         value={messageText}
+        onKeyPress={handleKeyPress}
         suffix={
-          <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
+          <Button htmlType="submit" onClick={onSubmit} type="primary">
             Send <SendOutlined />
           </Button>
         }
@@ -83,6 +84,11 @@ export default () => {
     getUserById(id).then((res) => setProfile(res));
   };
   console.log('here it is', profile);
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit();
+    }
+  };
   return (
     <>
       <PageHeader
@@ -170,6 +176,7 @@ export default () => {
         }
         content={
           <Editor
+            handleKeyPress={handleKeyPress}
             messageText={messageText}
             setMessageText={setMessageText}
             onSubmit={handleSubmit}
