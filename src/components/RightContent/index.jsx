@@ -1,4 +1,4 @@
-import { Space } from 'antd';
+import { Button, Dropdown, Menu, Space } from 'antd';
 import { QuestionCircleOutlined, BellFilled } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { useModel, SelectLang, history } from 'umi';
@@ -7,6 +7,7 @@ import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
 import NoticeIcon from '../NoticeIcon/NoticeIcon';
 import fire from '@/services/firebase-config/api';
+import './index.css';
 
 const GlobalHeaderRight = () => {
   const { initialState } = useModel('@@initialState');
@@ -52,9 +53,44 @@ const GlobalHeaderRight = () => {
   if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
     className = `${styles.right}  ${styles.dark}`;
   }
-  console.log('checking', notif?.Admin?.filter((n) => n.status === 0)?.length);
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: (
+            <a
+              onClick={() => {
+                history.push('/fire-reports');
+              }}
+            >
+              Fire Reports (
+              {Object.values(notif || {})
+                .flat()
+                .filter((n) => n.status === 0).length -
+                notif?.Admin?.filter((n) => n.status === 0)?.length || 0}
+              )
+            </a>
+          ),
+        },
+        {
+          label: (
+            <a
+              onClick={() => {
+                history.push('/warning-messages');
+              }}
+            >
+              Messages({warnCount?.flat()?.filter((n) => n[1]?.details?.status === 0).length})
+            </a>
+          ),
+        },
+      ]}
+    />
+  );
+
   return (
     <Space className={className}>
+      <menu />
       <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder="站内搜索"
@@ -86,16 +122,23 @@ const GlobalHeaderRight = () => {
           history.push('/fire-reports');
         }}
       >
-        <NoticeIcon
-          count={
-            warnCount?.flat()?.filter((n) => n[1]?.details?.status === 0).length +
-              Object.values(notif || {})
-                .flat()
-                .filter((n) => n.status === 0).length -
-              notif?.Admin?.filter((n) => n.status === 0)?.length || 0
-          }
-        />
+        {' '}
       </span>
+      <Dropdown overlay={menu} placement="topRight" arrow={{ pointAtCenter: true }}>
+        <Button ghost type="link">
+          {' '}
+          <NoticeIcon
+            count={
+              warnCount?.flat()?.filter((n) => n[1]?.details?.status === 0).length +
+                Object.values(notif || {})
+                  .flat()
+                  .filter((n) => n.status === 0).length -
+                notif?.Admin?.filter((n) => n.status === 0)?.length || 0
+            }
+          />
+        </Button>
+      </Dropdown>
+
       <Avatar />
       <SelectLang className={styles.action} />
     </Space>

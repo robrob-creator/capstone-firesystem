@@ -13,6 +13,7 @@ import { getStations } from '@/services/stations/api';
 import { Tabs, Radio, Space } from 'antd';
 import { render } from 'enzyme';
 import fire from '@/services/firebase-config/api';
+import { getUser } from '@/services/user/api';
 
 const { TabPane } = Tabs;
 const ColorList = [
@@ -120,6 +121,7 @@ const TableList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [warn, setWarn] = useState({});
   const [msgData, setMsgData] = useState();
+  const [viewData, setViewData] = useState([]);
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -160,8 +162,13 @@ const TableList = () => {
         return (
           <a
             onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
+              getUser(entity?.details?.userId).then((res) => {
+                console.log('the api response', res);
+                if (res) {
+                  setViewData([res]);
+                  setShowDetail(true);
+                }
+              });
             }}
           >
             {entity?.details?.user_name}
@@ -445,19 +452,47 @@ const TableList = () => {
         }}
         closable={false}
       >
-        {currentRow?.name && (
-          <ProDescriptions
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.name,
-            }}
-            columns={columns}
-          />
-        )}
+        {viewData &&
+          viewData.map((val, key) => {
+            console.log('the value', val);
+            return (
+              <ProDescriptions key={key} column={1} title={val?.userfname}>
+                <ProDescriptions.Item
+                  label={intl.formatMessage({
+                    id: 'pages.label.name',
+                    defaultMessage: 'Name',
+                  })}
+                >
+                  {val?.userfname}
+                </ProDescriptions.Item>
+                <ProDescriptions.Item
+                  label={intl.formatMessage({
+                    id: 'pages.label.address',
+                    defaultMessage: 'Address',
+                  })}
+                >
+                  {val?.address}
+                </ProDescriptions.Item>
+                <ProDescriptions.Item
+                  label={intl.formatMessage({
+                    id: ' pages.label.contact',
+                    defaultMessage: 'Contact No.',
+                  })}
+                >
+                  {val?.contactNumber}
+                </ProDescriptions.Item>
+
+                <ProDescriptions.Item
+                  label={intl.formatMessage({
+                    id: ' pages.label.residents',
+                    defaultMessage: 'Residents',
+                  })}
+                >
+                  {val?.resident ? val?.resident[0]?.residentList : ''}
+                </ProDescriptions.Item>
+              </ProDescriptions>
+            );
+          })}
       </Drawer>
     </PageContainer>
   );

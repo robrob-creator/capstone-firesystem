@@ -151,9 +151,11 @@ const TableList = () => {
           <a
             onClick={() => {
               getUser(entity.userId).then((res) => {
-                console.log('the api response');
-                setViewData([res]);
-                setShowDetail(true);
+                console.log('the api response', res);
+                if (res) {
+                  setViewData([res]);
+                  setShowDetail(true);
+                }
               });
             }}
           >
@@ -222,6 +224,7 @@ const TableList = () => {
           key="config"
           onClick={() => {
             handleUpdateModalVisible(true);
+            console.log(record);
             setCurrentRow(record);
           }}
         >
@@ -568,7 +571,7 @@ const TableList = () => {
                     defaultMessage: 'Address',
                   })}
                 >
-                  {val?.resident[0]?.residentinputddress}
+                  {val?.address}
                 </ProDescriptions.Item>
                 <ProDescriptions.Item
                   label={intl.formatMessage({
@@ -576,21 +579,17 @@ const TableList = () => {
                     defaultMessage: 'Contact No.',
                   })}
                 >
-                  {val?.ContactNumber?.contactNumber}
+                  {val?.contactNumber}
                 </ProDescriptions.Item>
-                {Object.entries(val?.resident?.residentsList).map((item, key) => {
-                  return (
-                    <ProDescriptions.Item
-                      key={key}
-                      label={intl.formatMessage({
-                        id: ' pages.label.resident' + ' ' + (key + 1),
-                        defaultMessage: 'Resident' + ' ' + (key + 1),
-                      })}
-                    >
-                      {item[1].name}
-                    </ProDescriptions.Item>
-                  );
-                })}
+
+                <ProDescriptions.Item
+                  label={intl.formatMessage({
+                    id: ' pages.label.residents',
+                    defaultMessage: 'Residents',
+                  })}
+                >
+                  {val?.resident ? val?.resident[0]?.residentList : ''}
+                </ProDescriptions.Item>
               </ProDescriptions>
             );
           })}
