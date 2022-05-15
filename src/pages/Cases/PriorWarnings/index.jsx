@@ -182,6 +182,11 @@ const TableList = () => {
       render: (dom, entity) => entity?.details?.date,
     },
     {
+      title: 'Time',
+      dataIndex: 'time',
+      render: (dom, entity) => entity?.details?.time,
+    },
+    {
       title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
       dataIndex: 'status',
       render: (dom, entity) => {
@@ -323,7 +328,7 @@ const TableList = () => {
                       setMeta(res);
                       console.log('data', Object.values(res));
                       return {
-                        data: Object.values(res),
+                        data: Object.values(res)?.reverse(),
                         success: true,
                       };
                     } catch (error) {}
