@@ -14,7 +14,7 @@ const Editor = ({ messageText, setMessageText, onSubmit, submitting, value, hand
       {/**  <TextArea rows={4} onChange={onChange} value={value} />*/}
       <Input
         size="large"
-        placeholder="large size"
+        placeholder="Enter a message"
         onChange={(e) => setMessageText(e.target?.value)}
         value={messageText}
         onKeyPress={handleKeyPress}
@@ -89,6 +89,7 @@ export default () => {
       handleSubmit();
     }
   };
+
   return (
     <>
       <PageHeader
