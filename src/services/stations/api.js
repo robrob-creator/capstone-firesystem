@@ -33,8 +33,8 @@ export async function createStation(body, options) {
       status: body.status,
       email: body.email,
       password: body.password,
-      token: '',
-      authorizations: body.res,
+      token: 'None',
+      authorizations: body.res ? body.res : '',
     },
     ...(options || {}),
   });

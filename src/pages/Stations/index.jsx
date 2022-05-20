@@ -46,6 +46,7 @@ const handleAdd = async (fields) => {
     message.success('Added successfully');
     return true;
   } catch (error) {
+    console.log(error);
     hide();
     message.error('Adding failed, please try again!');
     return false;
@@ -62,7 +63,7 @@ const handleUpdate = async (fields) => {
   const hide = message.loading('Configuring');
 
   try {
-    let res = await createUser({ ...fields });
+    let res = await createStation({ ...fields });
     hide();
     message.success('Configuration is successful');
     return true;
@@ -250,6 +251,7 @@ const TableList = () => {
               <a
                 onClick={() => {
                   handleUpdateModalVisible(true);
+                  setState;
                   setCurrentRow(row);
                 }}
                 target="_blank"
@@ -456,19 +458,17 @@ const TableList = () => {
       </ModalForm>
       {updateModalVisible && (
         <ModalForm
-          title={intl.formatMessage({
-            id: 'pages.searchTable.createForm.titleStation',
-            defaultMessage: 'New Station',
-          })}
+          title="Edit Station"
           width="400px"
-          visible={createModalVisible}
-          onVisibleChange={handleModalVisible}
+          visible={updateModalVisible}
+          onVisibleChange={handleUpdateModalVisible}
           onFinish={async (value) => {
-            const success = await handleAdd(value);
+            console.log(value);
+            const success = await handleUpdate(value);
 
-            if (success) {
-              handleModalVisible(false);
-
+            if (success?.true) {
+              handleUpdateModalVisible(false);
+              history.push('/success');
               if (actionRef.current) {
                 actionRef.current.reload();
               }
@@ -480,12 +480,6 @@ const TableList = () => {
             label={
               <FormattedMessage id="pages.searchTable.createForm.status" defaultMessage="Status" />
             }
-            rules={[
-              {
-                required: true,
-                message: <FormattedMessage id="errors.5003" defaultMessage="Is active required" />,
-              },
-            ]}
             name="status"
             options={[
               {
@@ -500,17 +494,6 @@ const TableList = () => {
           />
           <ProFormText
             initialValue={currentRow && currentRow.Station_Name}
-            rules={[
-              {
-                required: true,
-                message: (
-                  <FormattedMessage
-                    id="pages.searchTable.ruleName"
-                    defaultMessage="Rule name is required"
-                  />
-                ),
-              },
-            ]}
             label={
               <FormattedMessage
                 id="pages.searchTable.createForm.stationName"
@@ -522,17 +505,6 @@ const TableList = () => {
           />
           <ProFormText
             initialValue={currentRow && currentRow.Station_Hotline}
-            rules={[
-              {
-                required: true,
-                message: (
-                  <FormattedMessage
-                    id="pages.searchTable.ruleName"
-                    defaultMessage="Rule name is required"
-                  />
-                ),
-              },
-            ]}
             label={
               <FormattedMessage
                 id="pages.searchTable.createForm.stationHotline"
@@ -543,17 +515,6 @@ const TableList = () => {
             name="Station_Hotline"
           />
           <ProFormText
-            rules={[
-              {
-                required: true,
-                message: (
-                  <FormattedMessage
-                    id="pages.searchTable.ruleName"
-                    defaultMessage="Rule name is required"
-                  />
-                ),
-              },
-            ]}
             label={
               <FormattedMessage
                 id="pages.searchTable.createForm.stationSorting"
@@ -566,22 +527,6 @@ const TableList = () => {
           />
           <ProFormText
             initialValue={currentRow && currentRow.email}
-            rules={[
-              {
-                required: true,
-                message: (
-                  <FormattedMessage
-                    id="pages.searchTable.ruleName"
-                    defaultMessage="Rule name is required"
-                  />
-                ),
-              },
-              {
-                pattern:
-                  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: 'Invalid Email',
-              },
-            ]}
             label={
               <FormattedMessage id="pages.searchTable.createForm.email" defaultMessage="Email" />
             }
@@ -590,22 +535,11 @@ const TableList = () => {
           />
           <ProFormText.Password
             hidden
-            initialValue={currentRow && currentRow.Password}
+            initialValue={(currentRow && currentRow.Password) || currentRow.key}
             fieldProps={{
               size: 'large',
               prefix: <LockOutlined />,
             }}
-            rules={[
-              {
-                required: true,
-                message: (
-                  <FormattedMessage
-                    id="pages.searchTable.ruleName"
-                    defaultMessage="Rule name is required"
-                  />
-                ),
-              },
-            ]}
             label={
               <FormattedMessage
                 id="pages.searchTable.createForm.password"
