@@ -15,6 +15,8 @@ export async function currentUser(options) {
 /** 退出登录接口 POST /api/login/outLogin */
 
 export async function outLogin(options) {
+  store.remove('idToken');
+  store.remove('localId');
   return request('/api/login/outLogin', {
     method: 'POST',
     ...(options || {}),
